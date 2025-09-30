@@ -1,0 +1,57 @@
+name: agent-service-text-analysis-pipline
+services:
+  agent-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      # Database connection string for the backend (inside Docker network)
+      - DB_URI=postgresql://user:password@postgres_db:5432/postgres
+      # Provide your OpenAI API key via host env or .env file in this folder
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - postgres_db
+      - redis
+    networks:
+      - my_network
+
+  postgres_db:
+    image: postgres:latest
+    restart: always
+    container_name: postgres_db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - my_network
+
+volumes:
+  agent-service:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  my_network:
+    driver: bridge
