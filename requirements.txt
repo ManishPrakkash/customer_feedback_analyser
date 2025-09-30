@@ -1,0 +1,2 @@
+# Aggregator to support 'pip install -r requirements.txt' from repo root
+-r agent-service/requirements.txt

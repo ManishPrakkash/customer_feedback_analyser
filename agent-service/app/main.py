@@ -4,6 +4,7 @@ import warnings
 from dotenv import load_dotenv
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from langchain_core._api import LangChainBetaWarning
 from langserve import add_routes
 
@@ -64,6 +65,21 @@ app = FastAPI(
         version="Text Analyis Pipeline Agent",
         lifespan=lifespan
     )
+
+# Configure CORS for frontend deployments (e.g., Vercel)
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
+if allowed_origins_env.strip() == "*":
+    allowed_origins = ["*"]
+else:
+    allowed_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def index():

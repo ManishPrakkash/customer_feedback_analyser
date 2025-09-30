@@ -226,7 +226,7 @@ export type UIState = {
 	role: Role;
 	display: ReactNode;
 	spinner?: ReactNode;
-	analysis_summary: FeedbackAnalytics;
+	analysis_summary?: FeedbackAnalytics;
 };
 
 export const AI = createAI<AIState, UIState[]>({
