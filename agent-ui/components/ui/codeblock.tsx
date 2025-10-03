@@ -57,7 +57,7 @@ export const generateRandomString = (length: number, lowercase = false) => {
 };
 
 const CodeBlock: FC<Props> = memo(({ language, value }) => {
-	const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
+	const { isCopied, copy } = useCopyToClipboard();
 
 	const downloadAsFile = () => {
 		if (typeof window === "undefined") {
@@ -90,7 +90,7 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
 
 	const onCopy = () => {
 		if (isCopied) return;
-		copyToClipboard(value);
+		copy(value);
 	};
 
 	return (
