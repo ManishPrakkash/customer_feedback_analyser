@@ -165,11 +165,12 @@ async def index():
             "analyze": "/analyze",
             "docs": "/docs" if os.getenv("ENVIRONMENT", "development") == "development" else "disabled",
             "langserve": {
-                "invoke": "/invoke",
-                "stream": "/stream",
-                "input_schema": "/input_schema",
-                "output_schema": "/output_schema",
-                "playground": "/playground"
+                "base": "/langserve",
+                "invoke": "/langserve/invoke",
+                "stream": "/langserve/stream",
+                "input_schema": "/langserve/input_schema",
+                "output_schema": "/langserve/output_schema",
+                "playground": "/langserve/playground"
             }
         }
     }
