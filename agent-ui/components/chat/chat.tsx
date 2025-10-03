@@ -3,7 +3,7 @@
 import { ChatList } from "@/components/chat/chat-list";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { EmptyScreen } from "@/components/empty-screen";
-import { Message } from "@/lib/chat/actions";
+import type { Message } from "@/app/(chat)/actions";
 import { useLocalStorage } from "@/lib/hooks/use-local-storage";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { Session } from "@/lib/types";

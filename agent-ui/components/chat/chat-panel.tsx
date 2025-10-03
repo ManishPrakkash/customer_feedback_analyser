@@ -8,7 +8,7 @@ import { UserMessage } from "@/components/chat/message";
 import { PromptForm } from "@/components/chat/prompt-form";
 import { Button } from "@/components/ui/button";
 import { IconShare } from "@/components/ui/icons";
-import type { AI } from "@/lib/chat/actions";
+import type { AI } from "@/app/(chat)/actions";
 import { cn } from "@/lib/utils";
 import { useAIState, useActions, useUIState } from "ai/rsc";
 import { nanoid } from "nanoid";
