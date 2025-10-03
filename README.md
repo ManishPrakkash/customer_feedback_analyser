@@ -99,6 +99,67 @@ Open http://localhost:3000 in your browser and try sending feedback. The app is 
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [Next.js App Router](https://nextjs.org/)
 
+## Deployment (Free Hosting)
+
+### Deploy Backend to Render
+
+1. **Create account**: Sign up at [render.com](https://render.com)
+
+2. **Connect GitHub**: Link your GitHub account and select this repository
+
+3. **Create Web Service**:
+   - Service Type: Web Service
+   - Name: `customer-feedback-api` (or your choice)
+   - Root Directory: `agent-service`
+   - Runtime: Python 3
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+
+4. **Environment Variables**:
+   - `DEMO_MODE=true` (for free usage without API keys)
+   - `ALLOWED_ORIGINS=*` (initially; update after frontend deploy)
+
+5. **Deploy**: Click "Create Web Service" and wait for deployment
+
+6. **Get URL**: Note your backend URL (e.g., `https://customer-feedback-api.onrender.com`)
+
+### Deploy Frontend to Vercel
+
+1. **Create account**: Sign up at [vercel.com](https://vercel.com)
+
+2. **Import project**: 
+   - Click "New Project"
+   - Import from GitHub and select this repository
+   - Framework Preset: Next.js
+   - Root Directory: `agent-ui`
+
+3. **Environment Variables**:
+   - `NEXT_PUBLIC_AGENT_SERVICE_URL=https://your-backend-url.onrender.com`
+
+4. **Deploy**: Click "Deploy" and wait for completion
+
+5. **Get URL**: Note your frontend URL (e.g., `https://your-app.vercel.app`)
+
+### Final Configuration
+
+1. **Update CORS**: In Render, update your backend's `ALLOWED_ORIGINS` environment variable:
+   - Replace `*` with your Vercel URL: `https://your-app.vercel.app`
+
+2. **Test endpoints**:
+   ```bash
+   # Health check
+   curl https://your-backend-url.onrender.com/health
+   
+   # Analyze feedback
+   curl -X POST https://your-backend-url.onrender.com/analyze \
+     -H "Content-Type: application/json" \
+     -d '{"feedback":"I love the new product features!"}'
+   ```
+
+3. **Test frontend**: Visit your Vercel URL and try submitting feedback
+
+Your app is now live with a public endpoint!
+
 ## Try it out
 
 1. Create `.env` files and configure keys/URLs as shown above.
