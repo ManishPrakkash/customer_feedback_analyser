@@ -13,8 +13,6 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ValidationError
 from langchain_core._api import LangChainBetaWarning
 from langserve import add_routes
-
-from app.agent import graph as agent_graph
 from app.db import db_pool
 
 # Load environment variables
@@ -30,7 +28,8 @@ logger = logging.getLogger(__name__)
 # Suppress LangChain warnings
 warnings.filterwarnings("ignore", category=LangChainBetaWarning)
 
-logger.info(f"Graph imported successfully: {type(agent_graph)}")
+# Lazily import heavy/optional modules (LangGraph) only when needed to
+# avoid import-time failures when DEMO_MODE=true or keys are missing.
 
 
 def init_db():
@@ -309,6 +308,8 @@ async def analyze_feedback(request: FeedbackRequest):
             
             # Run the graph with timeout
             logger.info("Invoking LangGraph...")
+            # Import the compiled graph only when needed (avoids startup key checks)
+            from app.agent import graph as agent_graph  # defer import
             result = agent_graph.invoke(initial_state)
             logger.info("Graph execution completed successfully")
             
@@ -353,6 +354,8 @@ async def analyze_feedback(request: FeedbackRequest):
 if os.getenv("ENABLE_LANGSERVE", "false").lower() == "true":
     logger.info("Adding LangServe routes...")
     try:
+        # Import the compiled graph only when LangServe is explicitly enabled
+        from app.agent import graph as agent_graph  # defer import
         # Add routes with proper configuration for LangGraph
         add_routes(
             app,
@@ -373,6 +376,7 @@ if os.getenv("ENABLE_LANGSERVE", "false").lower() == "true":
             
             try:
                 from app.state import State
+                from app.agent import graph as agent_graph  # defer import
                 initial_state = State(feedback=request.feedback)
                 result = agent_graph.invoke(initial_state)
                 return {"status": "success", "result": result}
