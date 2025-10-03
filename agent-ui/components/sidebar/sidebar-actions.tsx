@@ -36,6 +36,7 @@ export function SidebarActions({
 	shareChat,
 }: SidebarActionsProps) {
 	const router = useRouter();
+	const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
 	const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 	const [shareDialogOpen, setShareDialogOpen] = React.useState(false);
 	const [isRemovePending, startRemoveTransition] = React.useTransition();
@@ -102,7 +103,7 @@ export function SidebarActions({
 								startRemoveTransition(async () => {
 									const result = await removeChat({
 										id: chat.id,
-										path: chat.path,
+										path: currentPath,
 									});
 
 									if (result && "error" in result) {

@@ -26,8 +26,8 @@ interface SidebarItemProps {
 
 export function SidebarItem({ index, chat, children }: SidebarItemProps) {
 	const pathname = usePathname();
-
-	const isActive = pathname === chat.path;
+	const href = chat.sharePath ?? `/chat/${chat.id}`;
+	const isActive = pathname === href;
 	const [newChatId, setNewChatId] = useLocalStorage("newChatId", null);
 	const shouldAnimate = index === 0 && isActive && newChatId;
 
@@ -69,7 +69,7 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
 				)}
 			</div>
 			<Link
-				href={chat.path}
+				href={href}
 				className={cn(
 					buttonVariants({ variant: "ghost" }),
 					"group w-full px-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10",
@@ -81,7 +81,7 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
 					title={chat.title}
 				>
 					<span className="whitespace-nowrap">
-						{shouldAnimate ? (
+						{shouldAnimate && chat.title ? (
 							chat.title.split("").map((character, index) => (
 								<motion.span
 									key={index}
@@ -104,7 +104,7 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
 										staggerChildren: 0.05,
 									}}
 									onAnimationComplete={() => {
-										if (index === chat.title.length - 1) {
+										if (chat.title && index === chat.title.length - 1) {
 											setNewChatId(null);
 										}
 									}}
@@ -113,7 +113,7 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
 								</motion.span>
 							))
 						) : (
-							<span>{chat.title}</span>
+							<span>{chat.title ?? "Untitled"}</span>
 						)}
 					</span>
 				</div>
