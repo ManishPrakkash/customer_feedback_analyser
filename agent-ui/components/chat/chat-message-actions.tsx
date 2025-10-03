@@ -16,11 +16,11 @@ export function ChatMessageActions({
 	className,
 	...props
 }: ChatMessageActionsProps) {
-	const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
+	const { isCopied, copy } = useCopyToClipboard();
 
 	const onCopy = () => {
 		if (isCopied) return;
-		copyToClipboard(message.content);
+		copy(message.content);
 	};
 
 	return (
