@@ -11,6 +11,7 @@ try:
 	import redis  # type: ignore
 except Exception:
 	redis = None  # type: ignore
+ 
 
 REDIS_URL = os.getenv("REDIS_URL")
 if redis is not None and REDIS_URL:
