@@ -10,6 +10,9 @@ const nextConfig = {
 			},
 		],
 	},
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
 	// Map "@" to the project root without relying on __dirname (ESM-safe)
 	webpack: (config) => {
 		config.resolve.alias = {

@@ -1,8 +1,8 @@
-import type { UIState } from "@/lib/chat/actions";
+import type { UIState } from "@/app/(chat)/actions";
 import { Session } from "@/lib/types";
 
 export interface ChatList {
-	messages: UIState;
+	messages: UIState[];
 	session?: Session;
 	isShared: boolean;
 }
